@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.kiro/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+
+# Smithy build output
+integration/build/
+
+# npm
+*.tgz

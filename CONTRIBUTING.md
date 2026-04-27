@@ -57,3 +57,34 @@ If you discover a potential security issue in this project we ask that you notif
 ## Licensing
 
 See the [LICENSE](LICENSE) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
+
+## Development
+
+Clone the repository and install dependencies:
+
+```
+npm ci
+```
+
+Run the test suite (uses Vitest):
+
+```
+npm test
+```
+
+Type-check without emitting:
+
+```
+npx tsc --noEmit
+```
+
+Bundle the action for distribution. This compiles the main entry point and
+the post step into self-contained files under `dist/`:
+
+```
+npm run package
+```
+
+The packaged output in `dist/main/index.js` and `dist/post/index.js` is
+what the action runner actually executes. Remember to run `npm run package`
+and commit the updated `dist/` directory before publishing a new version.
