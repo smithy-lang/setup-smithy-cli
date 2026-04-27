@@ -1,0 +1,61 @@
+name: Test Action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm ci
+      - run: npm run package
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+
+  test:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        version: ['', '1.56.0']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - name: Setup Smithy CLI
+        id: setup
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+          config: integration/smithy-build.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify smithy is on PATH
+        run: smithy --version
+      - name: Verify CLI version output is set
+        shell: bash
+        run: |
+          if [ -z "${{ steps.setup.outputs.cli-version }}" ]; then
+            echo "ERROR: cli-version output is empty"
+            exit 1
+          fi
+          echo "Installed Smithy CLI version: ${{ steps.setup.outputs.cli-version }}"
+      - name: Verify smithy build works
+        run: smithy build
+        working-directory: integration
+      - name: Verify smithy select finds Echo operation
+        shell: bash
+        working-directory: integration
+        run: smithy select --selector "operation" | grep -q "com.example#Echo"

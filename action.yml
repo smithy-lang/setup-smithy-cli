@@ -1,0 +1,22 @@
+name: 'Setup Smithy CLI'
+description: 'Install the Smithy CLI onto a GitHub Actions runner'
+
+inputs:
+  version:
+    description: 'Smithy CLI version to install. If omitted, installs the latest release.'
+    required: false
+    default: ''
+  config:
+    description: 'Path to smithy-build.json for Maven dependency caching. Defaults to smithy-build.json in the working directory.'
+    required: false
+    default: 'smithy-build.json'
+
+outputs:
+  cli-version:
+    description: 'The version of the Smithy CLI that was installed.'
+
+runs:
+  using: 'node24'
+  main: 'dist/main/index.js'
+  post: 'dist/post/post.js'
+  post-if: success()
