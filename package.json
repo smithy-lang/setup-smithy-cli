@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/node": "^25.5.2",
     "@types/semver": "^7.5.8",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.0",
     "fast-check": "^4.6.0",
     "typescript": "^6.0.2",
     "vitest": "^3.1.0"
